@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev",    
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint src --ext .tsx,.ts",
+    "lint:fix": "eslint src --ext .tsx,.ts --fix"
   },
   "dependencies": {
     "@types/react-dom": "18.2.7",
@@ -17,6 +18,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@rocketseat/eslint-config": "^2.1.0",
     "@types/node": "^20.4.8",
     "@types/react": "^18.2.18",
     "typescript": "^5.1.6"
