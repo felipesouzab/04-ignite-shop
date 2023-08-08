@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",    
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint src --ext .tsx,.ts",
     "lint:fix": "eslint src --ext .tsx,.ts --fix"
   },
   "dependencies": {
+    "@stitches/react": "^1.2.8",
     "@types/react-dom": "18.2.7",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.13",
