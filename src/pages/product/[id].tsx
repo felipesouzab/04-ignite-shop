@@ -4,7 +4,7 @@ import {
   ProductContainer,
   ProductDetails,
 } from '@/src/styles/pages/product'
-import { GetStaticProps } from 'next'
+import { GetStaticProps, GetStaticPaths } from 'next'
 import Image from 'next/image'
 import Stripe from 'stripe'
 
@@ -37,6 +37,14 @@ export default function Product({ product }: ProductProps) {
   )
 }
 
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [{ params: { id: 'prod_OQ9Y9oVkRg3pqj' } }],
+    fallback: 'blocking',
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
   params,
 }) => {
@@ -62,6 +70,6 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
         description: product.description,
       },
     },
-    revalidade: 60 * 60 * 1, // 1 hour
+    revalidate: 60 * 60 * 1, // 1 hour
   }
 }
