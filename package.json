@@ -12,6 +12,7 @@
   "dependencies": {
     "@stitches/react": "^1.2.8",
     "@types/react-dom": "18.2.7",
+    "axios": "^1.4.0",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.13",
     "keen-slider": "^6.8.6",
