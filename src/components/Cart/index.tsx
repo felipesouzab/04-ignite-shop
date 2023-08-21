@@ -11,8 +11,39 @@ import {
 } from './styles'
 import { X } from 'phosphor-react'
 import Image from 'next/image'
+import { useCart } from '@/src/hooks/useCart'
+import { useState } from 'react'
+import axios from 'axios'
 
 export function Cart() {
+  const { cartItems, removeCartItem, cartTotal } = useCart()
+  const cartQuantity = cartItems.length
+
+  const formattedCartTotal = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(cartTotal)
+
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+    useState(false)
+
+  async function handleCheckout() {
+    try {
+      setIsCreatingCheckoutSession(true)
+
+      const response = await axios.post('/api/checkout', {
+        products: cartItems,
+      })
+
+      const { checkoutUrl } = response.data
+
+      window.location.href = checkoutUrl
+    } catch (err) {
+      setIsCreatingCheckoutSession(false)
+      alert('Falha ao redirecionar ao checkout')
+    }
+  }
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -28,38 +59,49 @@ export function Cart() {
           <h2>Sacola de compras</h2>
 
           <section>
-            {/* <p>Parece que seu carrinho está vazio. </p> */}
+            {cartQuantity <= 0 && <p>Parece que seu carrinho está vazio. </p>}
 
-            <CartProduct>
-              <CartProductImage>
-                <Image
-                  width={100}
-                  height={93}
-                  alt=""
-                  src="https://s3-alpha-sig.figma.com/img/387d/13ce/de131bd1ccf9bbe6b2331e88d3df20cd?Expires=1693180800&Signature=ozkWZPJrvBzSDkj8n3wsZNc4CoZsgFA0G~6mZBU~6uL4ZoGBvR5Gqo7OsulJjINnhR2ZoR96ZrsfpTr4eBNTjNf81qcNYaVoOEgels4utkoTQZj5BusUbqu9tAOhp4goEmI4ft~5P-zMNdgfuwc1nhvwLqYA8tLz5NhJw4WgJoh3idJgwUwgDM8pHGBZgdZZ1sMS9saCVVntMkWx7U8VtyRv~Nfa9OViviznfgNK1hmM7UwT61KLoEI7sPX~jwoMvPkFO25teNdfkMUG2Env7TFwbkMX7QspAqg7YAWBCfC3qEdnjSSvMod72NKphZ02YhLeaD7~-B6bjXVmqCSK-w__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"
-                />
-              </CartProductImage>
+            {cartItems.map((cartItem) => (
+              <CartProduct key={cartItem.id}>
+                <CartProductImage>
+                  <Image
+                    width={100}
+                    height={93}
+                    alt=""
+                    src={cartItem.imageUrl}
+                  />
+                </CartProductImage>
 
-              <CartProductDetails>
-                <p>Produto 1</p>
-                <strong>R$ 79.90</strong>
-                <button>Remover</button>
-              </CartProductDetails>
-            </CartProduct>
+                <CartProductDetails>
+                  <p>{cartItem.name}</p>
+                  <strong>{cartItem.price}</strong>
+                  <button onClick={() => removeCartItem(cartItem.id)}>
+                    Remover
+                  </button>
+                </CartProductDetails>
+              </CartProduct>
+            ))}
           </section>
 
           <CartFinalization>
             <FinalizationDetails>
               <div>
                 <span>Quantidade</span>
-                <p>2 itens</p>
+                <p>
+                  {cartQuantity} {cartQuantity === 1 ? 'item' : 'itens'}
+                </p>
               </div>
               <div>
                 <span>Valor total</span>
-                <p>R$ 100.00</p>
+                <p>{formattedCartTotal}</p>
               </div>
             </FinalizationDetails>
-            <button>Finalizar compra</button>
+            <button
+              onClick={handleCheckout}
+              disabled={isCreatingCheckoutSession || cartQuantity <= 0}
+            >
+              Finalizar compra
+            </button>
           </CartFinalization>
         </CartContent>
       </Dialog.Portal>
