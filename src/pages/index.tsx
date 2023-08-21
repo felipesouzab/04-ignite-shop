@@ -13,19 +13,28 @@ import Stripe from 'stripe'
 import { CartButton } from '../components/CartButton'
 import { useCart } from '../hooks/useCart'
 import { IProduct } from '../contexts/CartContext'
-import { MouseEvent } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
+import { ProductSkeleton } from '../components/ProductSkeleton'
 
 interface HomeProps {
   products: IProduct[]
 }
 
 export default function Home({ products }: HomeProps) {
+  const [isLoading, setIsLoading] = useState(true)
   const [sliderRef] = useKeenSlider({
     slides: {
       perView: 3,
       spacing: 48,
     },
   })
+
+  useEffect(() => {
+    // fake loading to use the skeleton loading from figma
+    const timeOut = setTimeout(() => setIsLoading(false), 2000)
+
+    return () => clearTimeout(timeOut)
+  }, [])
 
   const { addToCart, checkIfItemAlreadyExist } = useCart()
 
@@ -44,37 +53,47 @@ export default function Home({ products }: HomeProps) {
       </Head>
 
       <HomeContainer ref={sliderRef} className="keen-slider">
-        {products.map((product) => (
-          <Link
-            key={product.id}
-            href={`/product/${product.id}`}
-            prefetch={false}
-            passHref
-          >
-            <Product className="keen-slider__slide">
-              <Image
-                src={product.imageUrl}
-                width={520}
-                height={480}
-                alt=""
-                placeholder="blur"
-                blurDataURL={product.imageUrl}
-              />
-              <footer>
-                <div>
-                  <strong>{product.name}</strong>
-                  <span>{product.price}</span>
-                </div>
-                <CartButton
-                  color="green"
-                  size="large"
-                  disabled={checkIfItemAlreadyExist(product.id)}
-                  onClick={(e) => handleAddToCart(e, product)}
-                />
-              </footer>
-            </Product>
-          </Link>
-        ))}
+        {isLoading ? (
+          <>
+            <ProductSkeleton className="keen-slider__slide" />
+            <ProductSkeleton className="keen-slider__slide" />
+            <ProductSkeleton className="keen-slider__slide" />
+          </>
+        ) : (
+          <>
+            {products.map((product) => (
+              <Link
+                key={product.id}
+                href={`/product/${product.id}`}
+                prefetch={false}
+                passHref
+              >
+                <Product className="keen-slider__slide">
+                  <Image
+                    src={product.imageUrl}
+                    width={520}
+                    height={480}
+                    alt=""
+                    placeholder="blur"
+                    blurDataURL={product.imageUrl}
+                  />
+                  <footer>
+                    <div>
+                      <strong>{product.name}</strong>
+                      <span>{product.price}</span>
+                    </div>
+                    <CartButton
+                      color="green"
+                      size="large"
+                      disabled={checkIfItemAlreadyExist(product.id)}
+                      onClick={(e) => handleAddToCart(e, product)}
+                    />
+                  </footer>
+                </Product>
+              </Link>
+            ))}
+          </>
+        )}
       </HomeContainer>
     </>
   )
