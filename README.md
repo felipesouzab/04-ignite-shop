@@ -9,8 +9,7 @@ criação de carroséis, Radix, Axios, entre outras.
 Essa aplicação é só o início dos estudos em Next.js mas já me possibilitou entender conceitos importantes para criação de aplicações cada vez mais perfomáticas.
  
 
-Desta vez, o deploy do projeto foi feito através do Vercel, venha conferir: <a href="04-ignite-shop-nine.vercel.app
-" target="_blank">Ignite Shop</a>
+Desta vez, o deploy do projeto foi feito através do Vercel, venha conferir: <a href="https://04-ignite-shop-nine.vercel.app" target="_blank">Ignite Shop</a>
 
 
 ## 💻 Challenge 04 - Ignite Shop
@@ -24,5 +23,4 @@ creation of carousels, Radix, Axios, among others.
 This application is just the beginning of studies in Next.js but it has already enabled me to understand important concepts for creating increasingly performant applications.
  
 
-This time, the project was deployed through Vercel, come check it out: <a href="04-ignite-shop-nine.vercel.app
-" target="_blank">Ignite Shop</a>
+This time, the project was deployed through Vercel, come check it out: <a href="https://04-ignite-shop-nine.vercel.app" target="_blank">Ignite Shop</a>
